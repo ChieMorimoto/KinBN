@@ -1,5 +1,5 @@
 KinBN <- function(ped.max = 25, range = 0){
-  version <- "ver 1.1.0"
+  version <- "ver 1.1.1"
   
   if(require("bnlearn")){
     print("bnlearn is loaded correctly")
@@ -225,6 +225,7 @@ KinBN <- function(ped.max = 25, range = 0){
       if (cf$mode == "LR"){
         DNAtype_matrix <- read.csv(tclvalue(cf$filepath_DNAtype), stringsAsFactors=F )
         locus_set.DNAtype <- DNAtype_matrix[,1]
+        allele.DNAtype <- DNAtype_matrix[-1,-1]
       }
       else{
         DNAtype_matrix <- ""
@@ -234,11 +235,15 @@ KinBN <- function(ped.max = 25, range = 0){
         tkmessageBox(message = "Error: incorrect file format of Mutation rate", parent = window, icon="error")
       }
       else if (!identical(locus_set, locus_set.mutation)){
-        tkmessageBox(message = "Error: incorrect locus set", parent = window, icon=="error")
+        tkmessageBox(message = "Error: incorrect locus set", parent = window, icon="error")
       }
       else if (cf$mode == "LR" && prod(sapply(locus_set, function(x){return(sum(locus_set.DNAtype == x) == 1)})) == 0 ){
         tkmessageBox(message = "Error: incorrect locus set", parent = window, icon="error")
       }
+      else if (cf$mode == "LR" && length(which(is.na(allele.DNAtype)==T))>=1 ){
+        tkmessageBox(message = "Error: incorrect file format of Profiles", parent = window, icon="error")
+      }
+
       else{
         is.default <- sapply(default_locus_set, function(x){if (setequal(x[[1]], locus_set) && length(x[[1]]) == length(locus_set) ) return(1) else return(0)})
         if (length(which(is.default == 1)) > 0){
@@ -280,16 +285,16 @@ KinBN <- function(ped.max = 25, range = 0){
   
     label_frequency <- tklabel(frame_file.frequency, text="Allele frequencies", font="our_font", width=15, anchor="w")
     check_frequency <- tklabel(frame_file.frequency, textvariable=OK_frequency, font="our_font", width=30, relief="groove", borderwidth="3", anchor="w")
-    button_frequency <- tkbutton(frame_file.frequency, text="Browse", font="our_font", width=10, command=function() OpenFile(filepath_frequency, OK_frequency, window) )
+    button_frequency <- tkbutton(frame_file.frequency, text="Browse", font="our_font", width=10, command=function() OpenFile(filepath_frequency, OK_frequency, window),cursor="hand2" )
     label_mutation <- tklabel(frame_file.mutation, text="Mutation rates", font="our_font", width=15, anchor="w")
     check_mutation <- tklabel(frame_file.mutation, textvariable=OK_mutation, font="our_font", width=30, relief="groove", borderwidth="3", anchor="w")
-    button_mutation <- tkbutton(frame_file.mutation, text="Browse", font="our_font", width=10, command=function() OpenFile(filepath_mutation, OK_mutation, window) )
+    button_mutation <- tkbutton(frame_file.mutation, text="Browse", font="our_font", width=10, command=function() OpenFile(filepath_mutation, OK_mutation, window),cursor="hand2" )
     if (mode == "LR"){
       label_DNAtype <- tklabel(frame_file.DNAtype, text="Profiles", font="our_font",width=15,anchor="w")
       check_DNAtype <- tklabel(frame_file.DNAtype, textvariable=OK_DNAtype, font="our_font", width=30, relief="groove", borderwidth="3", anchor="w")
-      button_DNAtype <- tkbutton(frame_file.DNAtype, text="Browse", font="our_font", width=10, command=function() OpenFile(filepath_DNAtype, OK_DNAtype, window) )
+      button_DNAtype <- tkbutton(frame_file.DNAtype, text="Browse", font="our_font", width=10, command=function() OpenFile(filepath_DNAtype, OK_DNAtype, window),cursor="hand2" )
     }
-    button_Files.next <- tkbutton(frame_Files.next,text="Next",font="our_font",width="10",
+    button_Files.next <- tkbutton(frame_Files.next,text="Next",font="our_font",width="10",cursor="hand2",
                                  command=function(){
                                    File_to_Hypo <- list(filepath_frequency, filepath_mutation, filepath_DNAtype, mode, range, as.integer(ped.max))
                                    names(File_to_Hypo) <- c("filepath_frequency", "filepath_mutation", "filepath_DNAtype", "mode", "range", "ped.max")
@@ -422,8 +427,8 @@ KinBN <- function(ped.max = 25, range = 0){
       frame_Linkage.select.input[[i]] <- tkframe(frame_Linkage.select)
       combobox_Linkage.locus1[[i]] <- ttkcombobox(frame_Linkage.select.input[[i]],values=var_locus,textvariable=locus1.var[[i]],font="our_font",width="10",state="disable")
       combobox_Linkage.locus2[[i]] <- ttkcombobox(frame_Linkage.select.input[[i]],values=var_locus,textvariable=locus2.var[[i]],font="our_font",width="10",state="disable")
-      entry_Linkage.RR[[i]] <- tkentry(frame_Linkage.select.input[[i]], textvariable=RR.var[[i]], width="15", font="our_font", background="#ffffff" ,state="disable")
-      button_Linkage.vanish[[i]] <- tkbutton(frame_Linkage.select.input[[i]],text="x",font="our_font",width=5,state="disable", command = button_vanish(i) )
+      entry_Linkage.RR[[i]] <- tkentry(frame_Linkage.select.input[[i]], textvariable=RR.var[[i]], width="15", font="our_font", background="#ffffff" ,state="disable",cursor="arrow")
+      button_Linkage.vanish[[i]] <- tkbutton(frame_Linkage.select.input[[i]],text="x",font="our_font",width=5,state="disable", command = button_vanish(i))
     }
 
     cb_default.change <- function(x){
@@ -442,13 +447,13 @@ KinBN <- function(ped.max = 25, range = 0){
           tkpack(frame_Linkage.select.input[[i]], anchor="w", pady="5")
           tkconfigure(combobox_Linkage.locus1[[i]], state="disable")
           tkconfigure(combobox_Linkage.locus2[[i]], state="disable")
-          tkconfigure(entry_Linkage.RR[[i]], state="disable")
-          tkconfigure(button_Linkage.vanish[[i]], state="disable")
+          tkconfigure(entry_Linkage.RR[[i]], state="disable",cursor="arrow")
+          tkconfigure(button_Linkage.vanish[[i]], state="disable",cursor="arrow")
           tclvalue(locus1.var[[i]]) <- var_locus[default.sort[linkage.loci.default[i,1]]]
           tclvalue(locus2.var[[i]]) <- var_locus[default.sort[linkage.loci.default[i,2]]]
           tclvalue(RR.var[[i]]) <- RR.default[i]
         }
-        tkconfigure(button_Linkage.add, state="disable")
+        tkconfigure(button_Linkage.add, state="disable",cursor="arrow")
       }
       else if(x == 0){
         tkpack(frame_Linkage.add, anchor="w", padx=40, pady=5)
@@ -457,10 +462,10 @@ KinBN <- function(ped.max = 25, range = 0){
         for (i in 1:pair.max){
           tkconfigure(combobox_Linkage.locus1[[i]], state="readonly")
           tkconfigure(combobox_Linkage.locus2[[i]], state="readonly")
-          tkconfigure(entry_Linkage.RR[[i]], state="normal")
-          tkconfigure(button_Linkage.vanish[[i]], state="normal")
+          tkconfigure(entry_Linkage.RR[[i]], state="normal",cursor="xterm")
+          tkconfigure(button_Linkage.vanish[[i]], state="normal",cursor="hand2")
         }
-        tkconfigure(button_Linkage.add, state="normal")
+        tkconfigure(button_Linkage.add, state="normal",cursor="hand2")
       }
       else{
         tkpack.forget(frame_Linkage.add)
@@ -469,7 +474,7 @@ KinBN <- function(ped.max = 25, range = 0){
       }
     }
     
-    button_Linkage.add <- tkbutton(frame_Linkage.add,text="Add",font="our_font",width=10,state="disable",
+    button_Linkage.add <- tkbutton(frame_Linkage.add,text="Add",font="our_font",width=10,state="disable",cursor="arrow",
                                    command = function(){
                                      if (0 <= linkage_number && linkage_number < pair.max){
                                        linkage_number <<- linkage_number + 1
@@ -480,9 +485,9 @@ KinBN <- function(ped.max = 25, range = 0){
 
     if (File.result$locus_set_name != "-"){
       useDefault <- tclVar("1")
-      radiobutton_off <- tkradiobutton(frame_Linkage.radiobutton, anchor="w", width=40, font="our_font", text=paste("Default settings of", File.result$locus_set_name, collapse=""), variable=useDefault, value=1, command=function(){cb_default.change(as.integer(tclvalue(useDefault)))})
-      radiobutton_on <- tkradiobutton(frame_Linkage.radiobutton, anchor="w", width=40, font="our_font", text="Manual setting", variable=useDefault, value=0, command=function(){cb_default.change(as.integer(tclvalue(useDefault)))})
-      radiobutton_none <- tkradiobutton(frame_Linkage.radiobutton, anchor="w", width=40, font="our_font", text="No linkage", variable=useDefault, value=-1, command=function(){cb_default.change(as.integer(tclvalue(useDefault)))})
+      radiobutton_off <- tkradiobutton(frame_Linkage.radiobutton, anchor="w", width=40, font="our_font",cursor="hand2", text=paste("Default settings of", File.result$locus_set_name, collapse=""), variable=useDefault, value=1, command=function(){cb_default.change(as.integer(tclvalue(useDefault)))})
+      radiobutton_on <- tkradiobutton(frame_Linkage.radiobutton, anchor="w", width=40, font="our_font",cursor="hand2", text="Manual setting", variable=useDefault, value=0, command=function(){cb_default.change(as.integer(tclvalue(useDefault)))})
+      radiobutton_none <- tkradiobutton(frame_Linkage.radiobutton, anchor="w", width=40, font="our_font",cursor="hand2", text="No linkage", variable=useDefault, value=-1, command=function(){cb_default.change(as.integer(tclvalue(useDefault)))})
 
       linkage.loci.default <- default_locus_set[[File.result$locus_set_name]][[2]]
       RR.default <- default_locus_set[[File.result$locus_set_name]][[3]]
@@ -497,22 +502,22 @@ KinBN <- function(ped.max = 25, range = 0){
     }
     else{
       useDefault <- tclVar("0")
-      radiobutton_on <- tkradiobutton(frame_Linkage.radiobutton, anchor="w", width=40, font="our_font", text="Manual setting", variable=useDefault, value=0, command=function(){cb_default.change(as.integer(tclvalue(useDefault)))})
-      radiobutton_none <- tkradiobutton(frame_Linkage.radiobutton, anchor="w", width=40, font="our_font", text="No linkage", variable=useDefault, value=-1, command=function(){cb_default.change(as.integer(tclvalue(useDefault)))})
+      radiobutton_on <- tkradiobutton(frame_Linkage.radiobutton, anchor="w", width=40, font="our_font",cursor="hand2", text="Manual setting", variable=useDefault, value=0, command=function(){cb_default.change(as.integer(tclvalue(useDefault)))})
+      radiobutton_none <- tkradiobutton(frame_Linkage.radiobutton, anchor="w", width=40, font="our_font",cursor="hand2", text="No linkage", variable=useDefault, value=-1, command=function(){cb_default.change(as.integer(tclvalue(useDefault)))})
       for (i in 1:pair.max){
         tkconfigure(combobox_Linkage.locus1[[i]], state="readonly")
         tkconfigure(combobox_Linkage.locus2[[i]], state="readonly")
         tkconfigure(entry_Linkage.RR[[i]], state="normal")
       }
       tkpack(frame_Linkage.select.input[[1]], anchor="w", pady=5)
-      tkconfigure(button_Linkage.add, state="normal")
+      tkconfigure(button_Linkage.add, state="normal",cursor="hand2")
     }
 
     label_Linkage.locus1 <- tklabel(frame_Linkage.label,text="Locus 1",font="our_font",width="12")
     label_Linkage.locus2 <- tklabel(frame_Linkage.label,text="Locus 2",font="our_font",width="12")
     label_Linkage.RR <- tklabel(frame_Linkage.label,text="Recombination rate",font="our_font",width="15")
     
-    button_Linkage.next <- tkbutton(frame_Linkage.next,text="Next",font="our_font",width="10", command = function(){tk2notetab.select(Tabs, "Hypothesis")} )
+    button_Linkage.next <- tkbutton(frame_Linkage.next,text="Next",font="our_font",width="10",cursor="hand2", command = function(){tk2notetab.select(Tabs, "Hypothesis")} )
     
     tkpack(outframe_Linkage.setting, anchor="w", padx=40, pady="20")
     tkpack(frame_Linkage.radiobutton, anchor="w", padx=20, pady="15")
@@ -704,8 +709,8 @@ KinBN <- function(ped.max = 25, range = 0){
     checkbutton_Hypo.change[[1]] <- function(){
       for (i in 1:ped.max){
         if (tclvalue(founder.var[[1]][[i]]) == 1){
-          tkconfigure(combobox_Hypo.pat[[1]][[i]], state="disable")
-          tkconfigure(combobox_Hypo.mat[[1]][[i]], state="disable")
+          tkconfigure(combobox_Hypo.pat[[1]][[i]], state="disable",cursor="arrow")
+          tkconfigure(combobox_Hypo.mat[[1]][[i]], state="disable",cursor="arrow")
           tclvalue(pat.var[[1]][[i]]) <- ""
           tclvalue(mat.var[[1]][[i]]) <- ""
         }
@@ -718,8 +723,8 @@ KinBN <- function(ped.max = 25, range = 0){
     checkbutton_Hypo.change[[2]] <- function(){
       for (i in 1:ped.max){
         if (tclvalue(founder.var[[2]][[i]]) == 1){
-          tkconfigure(combobox_Hypo.pat[[2]][[i]], state="disable")
-          tkconfigure(combobox_Hypo.mat[[2]][[i]], state="disable")
+          tkconfigure(combobox_Hypo.pat[[2]][[i]], state="disable",cursor="arrow")
+          tkconfigure(combobox_Hypo.mat[[2]][[i]], state="disable",cursor="arrow")
           tclvalue(pat.var[[2]][[i]]) <- ""
           tclvalue(mat.var[[2]][[i]]) <- ""
         }
@@ -733,7 +738,7 @@ KinBN <- function(ped.max = 25, range = 0){
     if (File.result$mode == "simu"){
       label_ref.num <- tklabel(frame_Hypo.apply, text="Number of known profiles", font="our_font", anchor="w")
       text_ref.num <- tkentry(frame_Hypo.apply, textvariable=ref.num, width=8, font="our_font", background="#ffffff")
-      button_ref.num <- tkbutton(frame_Hypo.apply, text="Apply",font="our_font", width=8,
+      button_ref.num <- tkbutton(frame_Hypo.apply, text="Apply",font="our_font",cursor="hand2", width=8,
                                   command = function(){
                                     if (File.result$mode == "simu" && is.na(as.integer(tclvalue(ref.num)))){
                                       tkmessageBox(message = paste("Please enter an integer of 2-", File.result$ped.max, " to Number of known profiles.", sep="", collapse=""), parent = window, icon="error")
@@ -794,10 +799,10 @@ KinBN <- function(ped.max = 25, range = 0){
       for (i in 1:ped.max){
         frame_Hypo.select.input[[j]][[i]] <- tkframe(frame_Hypo.select[[j]])
         label_Hypo.listname[[j]][[i]] <- tklabel(frame_Hypo.select.input[[j]][[i]], text=as.list(var_Hypo)[[i]], font="our_font", width=12)
-        combobox_Hypo.sex[[j]][[i]] <- ttkcombobox(frame_Hypo.select.input[[j]][[i]], values=var_sex, textvariable=sex.var[[j]][[i]], font="our_font", width=6, state="readonly")
-        combobox_Hypo.pat[[j]][[i]] <- ttkcombobox(frame_Hypo.select.input[[j]][[i]], values=var_parent[[j]], textvariable=pat.var[[j]][[i]], font="our_font", width=10, state="readonly")
-        combobox_Hypo.mat[[j]][[i]] <- ttkcombobox(frame_Hypo.select.input[[j]][[i]], values=var_parent[[j]], textvariable=mat.var[[j]][[i]], font="our_font", width=10, state="readonly")
-        checkbutton_Hypo.founder[[j]][[i]] <- tkcheckbutton(frame_Hypo.select.input[[j]][[i]], variable=founder.var[[j]][[i]], width=5, command=checkbutton_Hypo.change[[j]])
+        combobox_Hypo.sex[[j]][[i]] <- ttkcombobox(frame_Hypo.select.input[[j]][[i]], values=var_sex, textvariable=sex.var[[j]][[i]], font="our_font",cursor="hand2", width=6, state="readonly")
+        combobox_Hypo.pat[[j]][[i]] <- ttkcombobox(frame_Hypo.select.input[[j]][[i]], values=var_parent[[j]], textvariable=pat.var[[j]][[i]], font="our_font",cursor="hand2", width=10, state="readonly")
+        combobox_Hypo.mat[[j]][[i]] <- ttkcombobox(frame_Hypo.select.input[[j]][[i]], values=var_parent[[j]], textvariable=mat.var[[j]][[i]], font="our_font",cursor="hand2", width=10, state="readonly")
+        checkbutton_Hypo.founder[[j]][[i]] <- tkcheckbutton(frame_Hypo.select.input[[j]][[i]], variable=founder.var[[j]][[i]], width=5, command=checkbutton_Hypo.change[[j]],cursor="hand2")
       }
     }
     if (File.result$mode == "LR"){
@@ -807,12 +812,12 @@ KinBN <- function(ped.max = 25, range = 0){
     }
 
     button_Hypo.add <- button_Hypo.vanish <- button_Hypo.pedigree <- vector("list", length = 2)
-    button_Hypo.add[[1]] <- tkbutton(frame_Hypo.button[[1]], text="Add", font="our_font", width=9, command = function(){Hypo.add(1)} )
-    button_Hypo.add[[2]] <- tkbutton(frame_Hypo.button[[2]], text="Add", font="our_font", width=9, command = function(){Hypo.add(2)} )
-    button_Hypo.vanish[[1]] <- tkbutton(frame_Hypo.button[[1]], text="Delete", font="our_font", width=9, command = function(){Hypo.vanish(1)} )
-    button_Hypo.vanish[[2]] <- tkbutton(frame_Hypo.button[[2]], text="Delete", font="our_font", width=9, command = function(){Hypo.vanish(2)} )
-    button_Hypo.pedigree[[1]] <- tkbutton(frame_Hypo.button[[1]], text="View pedigree tree",font="our_font", command = function(){Hypo.pedigree(Hypo.pedigree.check(1))} )
-    button_Hypo.pedigree[[2]] <- tkbutton(frame_Hypo.button[[2]], text="View pedigree tree",font="our_font", command = function(){Hypo.pedigree(Hypo.pedigree.check(2))} )
+    button_Hypo.add[[1]] <- tkbutton(frame_Hypo.button[[1]], text="Add", font="our_font",cursor="hand2", width=9, command = function(){Hypo.add(1)} )
+    button_Hypo.add[[2]] <- tkbutton(frame_Hypo.button[[2]], text="Add", font="our_font",cursor="hand2", width=9, command = function(){Hypo.add(2)} )
+    button_Hypo.vanish[[1]] <- tkbutton(frame_Hypo.button[[1]], text="Delete", font="our_font",cursor="hand2", width=9, command = function(){Hypo.vanish(1)} )
+    button_Hypo.vanish[[2]] <- tkbutton(frame_Hypo.button[[2]], text="Delete", font="our_font",cursor="hand2", width=9, command = function(){Hypo.vanish(2)} )
+    button_Hypo.pedigree[[1]] <- tkbutton(frame_Hypo.button[[1]], text="View pedigree tree",font="our_font",cursor="hand2", command = function(){Hypo.pedigree(Hypo.pedigree.check(1))} )
+    button_Hypo.pedigree[[2]] <- tkbutton(frame_Hypo.button[[2]], text="View pedigree tree",font="our_font",cursor="hand2", command = function(){Hypo.pedigree(Hypo.pedigree.check(2))} )
   
     label_Hypo.name <- label_Hypo.sex <- label_Hypo.pat <- label_Hypo.mat <- label_Hypo.founder <- vector("list", length = 2)
   
@@ -827,7 +832,7 @@ KinBN <- function(ped.max = 25, range = 0){
       label_N <- tklabel(frame_Hypo.next, text="Number of simulations", width=18, font="our_font")
       text_N <- tkentry(frame_Hypo.next, textvariable=N, width=8, font="our_font", background="#ffffff")
     }
-    button_Hypo.next <- tkbutton(frame_Hypo.next, text="Calculate", font="our_font", width="10",
+    button_Hypo.next <- tkbutton(frame_Hypo.next, text="Calculate", font="our_font",cursor="hand2", width="10",
                                  command = function(){
                                         if (File.result$mode == "simu"){
                                           temp.N <- N
@@ -948,7 +953,7 @@ KinBN <- function(ped.max = 25, range = 0){
     labelframe_LR_simu <- tk2labelframe(frame_LR_simu, text="Simulation", labelanchor="nw", relief="groove", borderwidth=2)
     label_LR.N <- tklabel(labelframe_LR_simu, text="Number of simulations", font="our_font", width="18")
     text_LR.N <- tkentry(labelframe_LR_simu, textvariable=LR.N, width="8", font="our_font", background="#ffffff")
-    button_LR.simu <- tkbutton(labelframe_LR_simu, text="Calculation", font="our_font", width="10",
+    button_LR.simu <- tkbutton(labelframe_LR_simu, text="Calculation", font="our_font",cursor="hand2", width="10",
                                        command=function(){
                                          Linkage_to_calc <- checkLinkage(LR_result$locus_set_name, useDefault, var_locus, linkage_number, locus1.var, locus2.var, RR.var, LR.N)
                                          if (class(Linkage_to_calc) == "list"){
@@ -1021,7 +1026,7 @@ KinBN <- function(ped.max = 25, range = 0){
     label_LR.value <- tklabel(frame_LR.locus.value, textvariable=log_LR.value, font="our_font", justify="left")
     label_LR.linkage.locus <- tklabel(frame_LR.linkage.locus.value, textvariable=log_LR.linkage.locus, font="our_font", justify="left")
     label_LR.linkage.value <- tklabel(frame_LR.linkage.locus.value, textvariable=log_LR.linkage.value, font="our_font", justify="left")
-    button_LR.report <- tkbutton(frame_LR.report, text="Report", font="our_font", command=function() LR_Report(LR_result))
+    button_LR.report <- tkbutton(frame_LR.report, text="Report", font="our_font",cursor="hand2", command=function() LR_Report(LR_result))
   
     tkpack(labelframe_LR, anchor="w", padx=40, pady=10)
     tkpack(frame_LR.locus.value, anchor="w", side="left")
@@ -1073,7 +1078,7 @@ KinBN <- function(ped.max = 25, range = 0){
       label_simu.value[[k]] <- tklabel(frame_simu.result, width=15, text=paste(log_simu[[k]], sep="", collapse="\n"), font="our_font")
     }
   
-    button_simu.graph <- tkbutton(frame_simu.button,text=" Graph ", font="our_font",
+    button_simu.graph <- tkbutton(frame_simu.button,text=" Graph ", font="our_font",cursor="hand2",
                                           command=function(){
                                             xmax <- max(c(density(log10(LRprod[[1]]))[["x"]], density(log10(LRprod[[2]]))[["x"]]))
                                             xmin <- min(c(density(log10(LRprod[[1]]))[["x"]], density(log10(LRprod[[2]]))[["x"]]))
@@ -1096,8 +1101,8 @@ KinBN <- function(ped.max = 25, range = 0){
                                             tkgrab.set(window.graph)
                                           }
                                         )
-    button_simu.report <- tkbutton(frame_simu.button,text=" Report ", font="our_font", command=function() simu_Report(simu_result))
-    button_simu.download <- tkbutton(frame_simu.button,text=" All data ", font="our_font", command=function() alldata_Report(simu_result))
+    button_simu.report <- tkbutton(frame_simu.button,text=" Report ", font="our_font",cursor="hand2", command=function() simu_Report(simu_result))
+    button_simu.download <- tkbutton(frame_simu.button,text=" All data ", font="our_font",cursor="hand2", command=function() alldata_Report(simu_result))
   
     tkpack(outframe_simu, anchor="w", padx=20, pady=40)
     tkpack(frame_simu.result, anchor="w")
@@ -1233,8 +1238,10 @@ KinBN <- function(ped.max = 25, range = 0){
     pl <- calc.info$pList
     range <- 0
   
-    result.LR <- matrix(1,dim(alleletype)[4],length(al))
+    #result.LR <- matrix(1,dim(alleletype)[4],length(al))
+    result.LR <- matrix(1,1,length(al))
    
+
     n <- dim(pedigree)[1]
     founder <- which(pedigree[,1] == 0) 
     non_founder <- which(pedigree[,1] != 0)
@@ -1275,11 +1282,11 @@ KinBN <- function(ped.max = 25, range = 0){
       arc.set <- rbind(arc.putative_or_true, arc.allele_to_genotype, arc.parent_to_child, arc.mutation)
       arcs(PES) <- arc.set
   
-      for(m in 1:(dim(alleletype)[4])){  
+      #for(m in 1:(dim(alleletype)[4])){  
         for (k in 1:length(al)){
     
-          known_gt <- apply(alleletype[,k,DNAtype,m,drop=FALSE],3,function(x){return(paste(min(x),"-",max(x),sep=""))})
-          aList_number <- sort(unique(as.vector(alleletype[,k,,m])))
+          known_gt <- apply(alleletype[,k,DNAtype,1,drop=FALSE],3,function(x){return(paste(min(x),"-",max(x),sep=""))})
+          aList_number <- sort(unique(as.vector(alleletype[,k,,1])))
           uni_aList <- unique(c(al[[k]],aList_number))
           range_aList <- sort(unique(as.vector(sapply(c(-range:range),function(x){return(x + uni_aList)}))))
           aList <- range_aList[which(min(uni_aList) <= range_aList & range_aList <= max(uni_aList))]
@@ -1388,10 +1395,10 @@ KinBN <- function(ped.max = 25, range = 0){
           net2 <- setEvidence(fitted.grain, nodes=known_gtnodes, states=known_gt) 
           result.part <- querygrain(net2,nodes=c("target"))
           LR.locus <- result.part$target["T"] / result.part$target["F"]
-          result.LR[m,k] <- LR.locus
+          result.LR[1,k] <- LR.locus
         }
       }
-    }
+    #}
     return(result.LR)
   }
 
@@ -1409,8 +1416,8 @@ KinBN <- function(ped.max = 25, range = 0){
     RR <- calc.info$RR
   
     result.LR <- list()
-    result.LR.noL <- matrix(NA,dim(alleletype)[4],length(al))
-    result.LR.L <- matrix(1,dim(alleletype)[4],nrow(linkage.loci))
+    result.LR.noL <- matrix(NA,1,length(al))
+    result.LR.L <- matrix(1,1,nrow(linkage.loci))
   
     linkage.loci.name <- sapply(1:nrow(linkage.loci), function(i){paste(linkage.loci[i,1],"-",linkage.loci[i,2],sep="")})
     colnames(result.LR.L) <- linkage.loci.name
@@ -1494,10 +1501,10 @@ KinBN <- function(ped.max = 25, range = 0){
       matrix.list_L1 <- list()
       matrix.list_L2 <- list()
         
-      for(m in 1:dim(alleletype)[4]){
+      #for(m in 1:dim(alleletype)[4]){
         for (l in 1:nrow(linkage.loci)){
           for (k in linkage.loci[l,]){
-            aList_number <- sort(unique(as.vector(alleletype[,k,,m])))
+            aList_number <- sort(unique(as.vector(alleletype[,k,,1])))
             uni_aList <- unique(c(al[[k]],aList_number))
             aList <- sort(unique(as.vector(sapply(c(-range:range),function(x){return(x + uni_aList)}))))
         
@@ -1652,14 +1659,14 @@ KinBN <- function(ped.max = 25, range = 0){
   
           fitted.grain <-  as.grain(dfit)
           known_gtnodes <- c(nodenames_L1[3 * known_numbers],nodenames_L2[3 * known_numbers])
-          known_gt_L1 <- apply(alleletype[,linkage.loci[l,1],DNAtype,m,drop=FALSE],3,function(x){return(paste(min(x),"-",max(x),sep=""))})
-          known_gt_L2 <- apply(alleletype[,linkage.loci[l,2],DNAtype,m,drop=FALSE],3,function(x){return(paste(min(x),"-",max(x),sep=""))})
+          known_gt_L1 <- apply(alleletype[,linkage.loci[l,1],DNAtype,1,drop=FALSE],3,function(x){return(paste(min(x),"-",max(x),sep=""))})
+          known_gt_L2 <- apply(alleletype[,linkage.loci[l,2],DNAtype,1,drop=FALSE],3,function(x){return(paste(min(x),"-",max(x),sep=""))})
     
           net2 <- setEvidence(fitted.grain, nodes=known_gtnodes, states=c(known_gt_L1,known_gt_L2)) 
           result.part <- querygrain(net2,nodes=c("target"))
-          result.LR.L[m,l] <- result.part$target["T"] / result.part$target["F"]
+          result.LR.L[,l] <- result.part$target["T"] / result.part$target["F"]
         }
-      }
+      #}
     }
     result.LR[[1]] <- result.LR.noL
     result.LR[[2]] <- result.LR.L
@@ -1821,7 +1828,9 @@ KinBN <- function(ped.max = 25, range = 0){
   }
 
   Simulate <- function(Hypo.result){
-    t <- proc.time()
+    t.simu <- proc.time()
+    n.simu <- Hypo.result$N
+    pb <- tkProgressBar(title = "Simulation", min = 0,max = n.simu, width = 300)
 
     aList <- pList <- list()
     for (i in 1:(length(Hypo.result$locus_set))){
@@ -1837,7 +1846,7 @@ KinBN <- function(ped.max = 25, range = 0){
 
     alleletype <- list()
     for (k in 1:2){
-      pedmake.info <- list(aList, pList, mutation_pat, mutation_mat, Hypo.result$linkage.loci, Hypo.result$RR, Hypo.result$N, Hypo.result$df[[k]])
+      pedmake.info <- list(aList, pList, mutation_pat, mutation_mat, Hypo.result$linkage.loci, Hypo.result$RR, n.simu, Hypo.result$df[[k]])
       names(pedmake.info) <- c("aList", "pList", "mutation_pat", "mutation_mat", "linkage.loci", "RR", "N", "df")
       alleletype[[k]] <- Pedigree.make_linkage_mutation(pedmake.info)[,,1:sum(Hypo.result$df[[k]]$affected),]
     }
@@ -1866,55 +1875,82 @@ KinBN <- function(ped.max = 25, range = 0){
     }
 
     LR.step <- vector("list", length = 2) 
-   
+
     if(length(which(check.result==1))==1){
       for (k in 1:2){
         for(j in 1:2){
-          target_number[j] <- which(df.original[[j]][[1]]$DNAtype == which(check.result==1))
           if (is.na(Hypo.result$RR[1])){
-            LR.step[[k]][[j]] <- array(NA, dim=c(Hypo.result$N, length(Hypo.result$locus_set), 1))
-            calc.info <- c(LR.info[[k]], list(df = df.original[[j]][[1]], target_number = target_number[j]))
-            LR.step[[k]][[j]][,,1] <- PES_function(calc.info)
+            LR.step[[k]][[j]] <- array(NA, dim=c(n.simu, length(Hypo.result$locus_set), 1))
           }else{
             LR.step[[k]][[j]] <- list()
-            LR.step[[k]][[j]][[1]] <- array(NA, dim=c(Hypo.result$N, length(Hypo.result$locus_set) - 2 * length(Hypo.result$RR),1))
-            LR.step[[k]][[j]][[2]] <- array(NA, dim=c(Hypo.result$N, length(Hypo.result$RR), 1))
-            calc.info <- c(LR.info[[k]], list(df = df.original[[j]][[1]], target_number = target_number[j]))
-            temp.result <- PES_function_linkage(calc.info)
-            LR.step[[k]][[j]][[1]][,,1] <- temp.result[[1]]
-            LR.step[[k]][[j]][[2]][,,1] <- temp.result[[2]]
+            LR.step[[k]][[j]][[1]] <- array(NA, dim=c(n.simu, length(Hypo.result$locus_set) - 2 * length(Hypo.result$RR),1))
+            LR.step[[k]][[j]][[2]] <- array(NA, dim=c(n.simu, length(Hypo.result$RR), 1))
           }
-        }
-      }      
-    }else{          
+        }         
+      }
+           
+    }else{
       for (k in 1:2){        
         for(j in 1:2){
           if (is.na(Hypo.result$RR[1])){
-            LR.step[[k]][[j]] <- array(NA, dim=c(Hypo.result$N, length(Hypo.result$locus_set), sum(Hypo.result$df[[j]]$affected)))  
+            LR.step[[k]][[j]] <- array(NA, dim=c(n.simu, length(Hypo.result$locus_set), sum(Hypo.result$df[[j]]$affected)))  
           }else{
             LR.step[[k]][[j]] <- list()
-            LR.step[[k]][[j]][[1]] <- array(NA, dim=c(Hypo.result$N, length(Hypo.result$locus_set) - 2 * length(Hypo.result$RR), sum(Hypo.result$df[[1]]$affected)))
-            LR.step[[k]][[j]][[2]] <- array(NA, dim=c(Hypo.result$N, length(Hypo.result$RR), sum(Hypo.result$df[[j]]$affected)))
+            LR.step[[k]][[j]][[1]] <- array(NA, dim=c(n.simu, length(Hypo.result$locus_set) - 2 * length(Hypo.result$RR), sum(Hypo.result$df[[1]]$affected)))
+            LR.step[[k]][[j]][[2]] <- array(NA, dim=c(n.simu, length(Hypo.result$RR), sum(Hypo.result$df[[j]]$affected)))
           }               
-          for (i in 1:sum(Hypo.result$df[[j]]$affected)){
-            target_number[j] <- which(df.original[[j]][[i]]$DNAtype == i)
-            calc.info <- c(LR.info[[k]], list(df = df.original[[j]][[i]], target_number = target_number[j]))            
-            if (is.na(Hypo.result$RR[1])){          
-              LR.step[[k]][[j]][,,i] <- PES_function(calc.info)
+        }
+      }
+    }
+
+    for(m in 1:n.simu){
+      LR.info.each <- list()
+      for (k in 1:2){
+        LR.info.each[[k]] <- list(aList, pList, mutation_pat, mutation_mat, alleletype[[k]][,,,m,drop=F], Hypo.result$linkage.loci, Hypo.result$RR)
+        names(LR.info.each[[k]]) <- c("aList", "pList", "mutation_pat", "mutation_mat", "alleletype", "linkage.loci", "RR")
+      }
+
+      if(length(which(check.result==1))==1){
+        for (k in 1:2){
+          for(j in 1:2){
+            target_number[j] <- which(df.original[[j]][[1]]$DNAtype == which(check.result==1))
+            if (is.na(Hypo.result$RR[1])){
+              calc.info <- c(LR.info.each[[k]], list(df = df.original[[j]][[1]], target_number = target_number[j]))
+              LR.step[[k]][[j]][m,,1] <- PES_function(calc.info)
             }else{
+              calc.info <- c(LR.info.each[[k]], list(df = df.original[[j]][[1]], target_number = target_number[j]))
               temp.result <- PES_function_linkage(calc.info)
-              LR.step[[k]][[j]][[1]][,,i] <- temp.result[[1]]
-              LR.step[[k]][[j]][[2]][,,i] <- temp.result[[2]]
+              LR.step[[k]][[j]][[1]][m,,1] <- temp.result[[1]]
+              LR.step[[k]][[j]][[2]][m,,1] <- temp.result[[2]]
             }
-            if (i != sum(Hypo.result$df[[j]]$affected)){
-              df.del <- df.original[[j]][[i]]
-              df.del$DNAtype[target_number[j]] <- 0
-              df.original[[j]][[i + 1]] <- pedigree.simple(df.del)
+          }         
+        }
+           
+      }else{
+        for (k in 1:2){        
+          for(j in 1:2){               
+            for (i in 1:sum(Hypo.result$df[[j]]$affected)){
+              target_number[j] <- which(df.original[[j]][[i]]$DNAtype == i)
+              calc.info <- c(LR.info.each[[k]], list(df = df.original[[j]][[i]], target_number = target_number[j]))            
+              if (is.na(Hypo.result$RR[1])){          
+                LR.step[[k]][[j]][m,,i] <- PES_function(calc.info)
+              }else{
+                temp.result <- PES_function_linkage(calc.info)
+                LR.step[[k]][[j]][[1]][m,,i] <- temp.result[[1]]
+                LR.step[[k]][[j]][[2]][m,,i] <- temp.result[[2]]
+              }
+              if (i != sum(Hypo.result$df[[j]]$affected)){
+                df.del <- df.original[[j]][[i]]
+                df.del$DNAtype[target_number[j]] <- 0
+                df.original[[j]][[i + 1]] <- pedigree.simple(df.del)
+              }
             }
           }
         }
       }
+      setTkProgressBar(pb,m, label=paste( round(m/n.simu*100, 0),"% done")) 
     }
+    close(pb)
 
     if (is.na(Hypo.result$RR[1])){
       LR <- list()
@@ -1929,9 +1965,10 @@ KinBN <- function(ped.max = 25, range = 0){
       }
     }
 
-    calc.time <- proc.time() - t
-    return_information <- list(LR, calc.time)
-    names(return_information) <- c("LR","calc.time")
+    calc.time.simu <- proc.time() - t.simu
+    
+    return_information <- list(LR, calc.time.simu)
+    names(return_information) <- c("LR","calc.time.simu")
     return(c(Hypo.result, return_information))
   }
 
@@ -2067,7 +2104,7 @@ KinBN <- function(ped.max = 25, range = 0){
   simu_Report <- function(simu_result){
     simu_items <- c("","min","5th percentile","25th percentile","50th percentile","75th percentile","95th percentile","max")
     report_today <- format(simu_result$today, "%Y/%b/%d %X")
-    report_calc.time <- paste(signif(simu_result$calc.time[3], digits=3), "sec", collapse="")
+    report_calc.time_simu <- paste(signif(simu_result$calc.time.simu[3], digits=3), "sec", collapse="")
 
     LRprod <- list()
     for (k in 1:2){
@@ -2100,7 +2137,7 @@ KinBN <- function(ped.max = 25, range = 0){
                               "\n======== Information ========\n",
                               "Version: ,", version, "\n",
                               "Date: ,",report_today,"\n",
-                              "Computation time: ,",report_calc.time
+                              "Computation time: ,",report_calc.time_simu
                             ),sep="",collapse=""
                           )
     report <- paste(Report.common(simu_result), report_simu.specific, sep="", collapse="")
@@ -2195,7 +2232,7 @@ KinBN <- function(ped.max = 25, range = 0){
   frame_mode.select <- tkframe(frame_Mode)
 
   mode <- tclVar("1")
-  button_LR <- tkbutton(frame_mode.select,font="our_font",text="Case analysis", width=18, 
+  button_LR <- tkbutton(frame_mode.select,font="our_font",cursor="hand2",text="Case analysis", width=18, 
                          command=function(){
                            if (!already_pack.File || tclvalue(tkmessageBox(message="Setting of Linkage and Hypothesis will be deleted. Do you want to continue?", type="okcancel", parent = window, icon="warning")) == "ok"){
                              if (already_pack.File){
@@ -2217,7 +2254,7 @@ KinBN <- function(ped.max = 25, range = 0){
                            }
                                            }
                          )
-  button_simu <- tkbutton(frame_mode.select,font="our_font",text="Simulation", width=18, 
+  button_simu <- tkbutton(frame_mode.select,font="our_font",cursor="hand2",text="Simulation", width=18, 
                          command=function(){
                            if (!already_pack.File || tclvalue(tkmessageBox(message="Setting of Linkage and Hypothesis will be deleted. Do you want to continue?", type="okcancel", parent = window, icon="warning")) == "ok"){
                              if (already_pack.File){
