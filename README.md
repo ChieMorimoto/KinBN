@@ -1,3 +1,0 @@
-# KinBN
-
-KinBN is a free software GNU General Public License v3.0 for kinship analysis based on a Bayesian network. It can be applied to s hort tandem repeat (STR) markers commonly used in forensic genetics and calculates likelihood ratio (LR) considering linkage between loci and mutation The software is graphical user interface written in R language. The software has been validated under various conditions.
