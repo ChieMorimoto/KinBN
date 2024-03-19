@@ -1,4 +1,4 @@
-Package: KinBNpackage
+Package: KinBN
 Type: Package
 Title: Kinship analysis based on a Bayesian network
 Version: 2.0.0
