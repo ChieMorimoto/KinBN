@@ -1,0 +1,16 @@
+Package: KinBNpackage
+Type: Package
+Title: Kinship analysis based on a Bayesian network
+Version: 2.0.0
+Author: Chie Morimoto <morimoto@fp.med.kyoto-u.ac.jp>
+Maintainer: Chie Morimoto <morimoto@fp.med.kyoto-u.ac.jp>
+Description: KinBN is a free software for kinship analysis based on a Bayesian network. It can be applied to s hort tandem repeat (STR) markers commonly used in forensic genetics and calculates likelihood ratio.
+License: GPL (>=3)
+Encoding: UTF-8
+LazyData: true
+Depends: R (>= 4.2.0), tcltk, tcltk2, bnlearn, gRbase
+Imports: gRain, tkrplot, kinship2
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+RoxygenNote: 7.2.3
