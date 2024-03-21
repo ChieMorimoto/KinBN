@@ -13,16 +13,16 @@ Minor changes:
 * The user can set the calculation conditions, such as the estimation method of allele frequency, in the Setting tab.
 
 ## Getting started
-1. Install the R language  (v.4.3 or v.4.2) available on the R Development Core Team website (http://www.R project.org).
+1. Install the R language  (v.4.3 or v.4.2) available on the R Development Core Team website (http://www.r-project.org).
 
 2. Enter the code below the R console to install KinBN and other necessary packages.
 ```r
 install.packages('https://github.com/ChieMorimoto/KinBN/releases/download/v2.0.0/KinBN_2.0.0.zip',repos=NULL,type='win.binary')
-install.packages(c(“tcltk2”, “bnlearn”, “gRbase”, “gRain”, “tkrplot”, “kinship2”))
+install.packages(c("tcltk2", "bnlearn", "gRbase", "gRain", "tkrplot", "kinship2"))
 ```
 
 3. Enter the codes below to start the graphical user interface (GUI).
 ```r
 library(KinBN)
-KinBN()
+KinBN::KinBN()
 ```
