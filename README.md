@@ -1,9 +1,3 @@
----
-editor_options: 
-  markdown: 
-    wrap: sentence
----
-
 # KinBN
 
 KinBN is a free software (GNU General Public License v3.0) for kinship analysis based on the Bayesian network .
