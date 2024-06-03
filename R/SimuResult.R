@@ -39,7 +39,22 @@ SimuResult <- function(envProj, envGUI){
       par(new=T)
       abline(v=log10(OverallLR), col=rgb(0,0,0), lwd=3, lty=2)
       par(xpd=T)
-      legend(par()$usr[2], par()$usr[4],col=c(rgb(1,0,0),rgb(0,0.5,1)),lty=c(1,1),lwd=c(3,3),c("H1 true","H2 true"))
+      legend(par()$usr[2], par()$usr[4],col=c(rgb(1,0,0),rgb(0,0.5,1),rgb(0,0,0)),lty=c(1,1,2),lwd=c(3,3,3),c("H1 true","H2 true", "Case"))
+    }
+  }else if(length(which(!is.infinite(LRprod[[1]]))) < 2 ){
+    xmax <- max(c(density(log10(LRprod[[2]]))[["x"]]), log10(OverallLR))
+    xmin <- min(c(density(log10(LRprod[[2]]))[["x"]]), log10(OverallLR))
+    xwidth <- xmax - xmin
+    xmax <- xmax + xwidth / 15
+    xmin <- xmin - xwidth / 15
+    ymax <- max(c(density(log10(LRprod[[2]]))[["y"]]) * 1.1)
+    graph.draw <- function(){
+      par(mar=c(4,6,3,9))
+      plot(density(log10(LRprod[[2]])), col=rgb(0,0.5,1), lwd=2, las=1, cex.lab=1.2, xlim=c(xmin,xmax), ylim=c(0,ymax), xlab=expression(log[10](LR)), main="")
+      par(new=T)
+      abline(v=log10(OverallLR), col=rgb(0,0,0), lwd=3, lty=2)
+      par(xpd=T)
+      legend(par()$usr[2], par()$usr[4],col=c(rgb(1,0,0),rgb(0,0.5,1),rgb(0,0,0)),lty=c(1,1,2),lwd=c(3,3,3),c("H1 true","H2 true", "Case"))
     }
   }else{
     xmax <- max(c(density(log10(LRprod[[1]]))[["x"]], density(log10(LRprod[[2]]))[["x"]]))
@@ -55,7 +70,7 @@ SimuResult <- function(envProj, envGUI){
       plot(density(log10(LRprod[[2]])), col=rgb(0,0.5,1), lwd=2, las=1, cex.lab=1.2, xlim=c(xmin,xmax), ylim=c(0,ymax), xlab=expression(log[10](LR)), main="")
       abline(v=log10(OverallLR), col=rgb(0,0,0), lwd=3, lty=2)
       par(xpd=T)
-      legend(par()$usr[2], par()$usr[4],col=c(rgb(1,0,0),rgb(0,0.5,1)),lty=c(1,1),lwd=c(3,3),c("H1 true","H2 true"))
+      legend(par()$usr[2], par()$usr[4],col=c(rgb(1,0,0),rgb(0,0.5,1),rgb(0,0,0)),lty=c(1,1,2),lwd=c(3,3,3),c("H1 true","H2 true", "Case"))
     }
   }
 

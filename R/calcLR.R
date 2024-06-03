@@ -12,7 +12,6 @@ calcLR <- function(envProj, envGUI){
     }
   }
 
-
   t <- proc.time()
   today <- Sys.time()
   df <- list()
@@ -48,11 +47,6 @@ calcLR <- function(envProj, envGUI){
   alleletype <- array(NA, dim=c(2, length(locus_set), No.known.ref, 1))
   for (i in 1:No.known.ref){
     alleletype[,,i,1] <- apply(t(DNAtype_matrix[, (2 * i) : (2 * i + 1)]), c(1,2), function(x){return(as.numeric(x))})
-  }
-
-  if(DropMode == "1"){
-    alleletype <- array(apply(alleletype[,,,1,drop=FALSE],c(2,3),allele_to_homogenotype)
-                        , dim=c(2, length(locus_set), No.known.ref, 1))
   }
 
   drop.loci <-which(apply(alleletype, 2,function(x){any(is_blank(x))})==TRUE)

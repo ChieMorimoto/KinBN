@@ -186,7 +186,7 @@ PES_function_drop <- function(calc.info, DropMode, FixedLR, PrD, FreqMode, min.f
             }
           }
         }
-        mutation_paternal <- t(apply(pre_mutation_paternal,1,function(x){return(x / sum(x))}))
+        mutation_paternal <- apply(pre_mutation_paternal,1,function(x){return(x / sum(x))})
         dimnames(mutation_paternal) <- list(aList2,aList2)
 
         pre_mutation_maternal <- matrix(0,nrow=pol,ncol=pol)
@@ -197,7 +197,7 @@ PES_function_drop <- function(calc.info, DropMode, FixedLR, PrD, FreqMode, min.f
             }
           }
         }
-        mutation_maternal <- t(apply(pre_mutation_maternal,1,function(x){return(x / sum(x))}))
+        mutation_maternal <- apply(pre_mutation_maternal,1,function(x){return(x / sum(x))})
         dimnames(mutation_maternal) <- list(aList2,aList2)
 
         matrix.person <- list()

@@ -36,7 +36,6 @@ PES_function_linkage_drop <- function(calc.info.all, DropMode, FixedLR, PrD, Fre
   }else if(!any(drop.loci %in% linkage.loci.vector)){
     locus.number.noL <- locus.number[!(locus.number %in% linkage.loci.vector)]
     result.LR.locus <- PES_function_drop(calc.info, DropMode, FixedLR, PrD, FreqMode, min.freq, locus.number.noL)
-    #linkloci <- which(locus.number %in% as.vector(calc.info$linkage.loci[,1]))
     linkloci <- as.vector(calc.info$linkage.loci[,1])
     A <- PES_function_linkage(calc.info, FreqMode, min.freq, linkloci)
     result.LR.locus[1,calc.info$linkage.loci[,1]] <- A[linkloci]
@@ -198,7 +197,7 @@ PES_function_linkage_drop <- function(calc.info.all, DropMode, FixedLR, PrD, Fre
               }
             }
           }
-          mutation_paternal <- t(apply(pre_mutation_paternal,1,function(x){return(x / sum(x))}))
+          mutation_paternal <- apply(pre_mutation_paternal,1,function(x){return(x / sum(x))})
           dimnames(mutation_paternal) <- list(aList2,aList2)
 
           pre_mutation_maternal <- matrix(0,nrow=pol,ncol=pol)
@@ -209,7 +208,7 @@ PES_function_linkage_drop <- function(calc.info.all, DropMode, FixedLR, PrD, Fre
               }
             }
           }
-          mutation_maternal <- t(apply(pre_mutation_maternal,1,function(x){return(x / sum(x))}))
+          mutation_maternal <- apply(pre_mutation_maternal,1,function(x){return(x / sum(x))})
           dimnames(mutation_maternal) <- list(aList2,aList2)
 
           matrix.person <- list()
@@ -295,8 +294,6 @@ PES_function_linkage_drop <- function(calc.info.all, DropMode, FixedLR, PrD, Fre
                 genotype_to_dropgenotype[length(gList2.drop),i] <- Pr_D^2
               }
             }else if(DropMode == "2"){
-              #genotype_to_dropgenotype <- matrix(1/length(gList2.drop),nrow=length(gList2.drop),ncol=length(gList2))
-
               genotype_to_dropgenotype <- matrix(0,nrow=length(gList2.drop),ncol=length(gList2))
               homo_gt <- which(gList2 %in% gList[which(allele1 == allele2)])
               hetero_gt <- c(1:length(gList2))[-homo_gt]

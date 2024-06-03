@@ -35,9 +35,9 @@ Report.common <- function(modeStateVar, dropState, DropMode, FreqMode, FixedLR, 
   }else if(DropMode == "0"){
     report.drop <- paste("User-defied LR", "(LR=", FixedLR, ")", sep="")
   }else if(DropMode == "2"){
-    report.drop <- "LR considering all possible genotypes equally (Method 1)"
+    report.drop <- "LR considering all possible genotypes equally (Method A)"
   }else if(DropMode == "3"){
-    report.drop <- paste("LR calculated with Pr(D) (Method 2)", "(Pr(D)=", PrD, ")", sep="")
+    report.drop <- paste("LR calculated with Pr(D) (Method B)", "(Pr(D)=", PrD, ")", sep="")
   }
   if (FreqMode=="0"){
     report.allelefreq <- "Estimated by Dirichlet distributions"

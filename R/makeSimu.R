@@ -53,6 +53,19 @@ makeSimu <- function(envProj, envGUI, modeStateVar){
         par(xpd=T)
         legend(par()$usr[2], par()$usr[4],col=c(rgb(1,0,0),rgb(0,0.5,1)),lty=c(1,1),lwd=c(3,3),c("H1 true","H2 true"))
       }
+    }else if(length(which(!is.infinite(LRprod[[1]]))) < 2 ){
+      xmax <- max(c(density(log10(LRprod[[2]]))[["x"]]))
+      xmin <- min(c(density(log10(LRprod[[2]]))[["x"]]))
+      xwidth <- xmax - xmin
+      xmax <- xmax + xwidth / 15
+      xmin <- xmin - xwidth / 15
+      ymax <- max(c(density(log10(LRprod[[2]]))[["y"]]) * 1.1)
+      graph.draw <- function(){
+        par(mar=c(4,6,3,9))
+        plot(density(log10(LRprod[[2]])), col=rgb(0,0.5,1), lwd=2, las=1, cex.lab=1.2, xlim=c(xmin,xmax), ylim=c(0,ymax), xlab=expression(log[10](LR)), main="")
+        par(xpd=T)
+        legend(par()$usr[2], par()$usr[4],col=c(rgb(1,0,0),rgb(0,0.5,1)),lty=c(1,1),lwd=c(3,3),c("H1 true","H2 true"))
+      }
     }else{
       xmax <- max(c(density(log10(LRprod[[1]]))[["x"]], density(log10(LRprod[[2]]))[["x"]]))
       xmin <- min(c(density(log10(LRprod[[1]]))[["x"]], density(log10(LRprod[[2]]))[["x"]]))

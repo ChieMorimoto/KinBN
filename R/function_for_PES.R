@@ -20,15 +20,5 @@ allele_to_dropgenotype <- function(x){
   return(paste(min(x),"-",max(x),sep=""))
 }
 
-allele_to_homogenotype <- function(x){
-  if(is.na(x[1]) && !is.na(x[2])){
-    x[1] <- x[2]
-  }else if(is.na(x[2]) && !is.na(x[1])){
-    x[2] <- x[1]
-  }
-  return(x)
-}
-
-
 
 

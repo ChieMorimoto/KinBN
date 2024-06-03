@@ -26,7 +26,7 @@ KinBN <- function(){
   modeStateVar <- tclVar(modeState)
 
   tf <- tktoplevel()
-  tkwm.title(tf, paste0("KinBN ver. ", softVer))
+  tkwm.title(tf, "KinBN")
 
   topMenu <- tkmenu(tf)
   tkconfigure(tf, menu = topMenu)
@@ -55,7 +55,7 @@ KinBN <- function(){
 
   help_menu <- tkmenu(topMenu, tearoff = FALSE, activebackground = "lightskyblue1")
   tkadd(topMenu, "cascade", label = "Help", menu = help_menu)
-  tkadd(help_menu, "command", label = "User manual", command = function() browseURL("https://github.com/ChieMorimoto/KinBN/blob/master/inst/KinBN v2.0.0 user manual.pdf"))
+  tkadd(help_menu, "command", label = "User manual", command = function() browseURL("https://github.com/ChieMorimoto/KinBN/blob/master/inst/manual/KinBN v2.1.0 user manual.pdf"))
   tkadd(help_menu, "command", label = "About KinBN", command = function() tkmessageBox(title = paste0("KinBN ver. ", softVer), message = "KinBN is a free software GNU General Public License v3.0 for kinship analysis based on a Bayesian network.\nWeb: https://github.com/ChieMorimoto/KinBN", parent = tf, icon="info"))
 
   tabs <- tk2notebook(tf, tabs = c("Files", "Hypothesis", "Results"))

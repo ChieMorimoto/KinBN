@@ -13,7 +13,7 @@ setEnvProj <- function(envProj, setfiles){
     assign("gtFn", character(0), envir = envProj)
   }
 
-  assign("softVer", "2.0.0", envir = envProj)
+  assign("softVer", "2.1.0", envir = envProj)
   assign("ped.max", 25, envir = envProj)
 
   assign("Mode", "LR", envir = envProj)

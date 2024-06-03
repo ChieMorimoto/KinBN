@@ -48,7 +48,7 @@ windowDropSet <- function(envProj){
                                        tkconfigure(entry_Semi, state="disabled")
                                      })
   radiobutton_Both <- tkradiobutton(frame_Drop.radiobutton, anchor="w", width=50, cursor="hand2",
-                                    text = "LR considering all possible genotypes equally (Method 1)", variable = DropModeVar, value = 2,
+                                    text = "LR considering all possible genotypes equally (Method A)", variable = DropModeVar, value = 2,
                                     command = function() {
                                       tkconfigure(label_FixedLR, state="disabled")
                                       tkconfigure(entry_FixedLR, state="disabled")
@@ -56,7 +56,7 @@ windowDropSet <- function(envProj){
                                       tkconfigure(entry_Semi, state="disabled")
                                     })
   radiobutton_Semi <- tkradiobutton(frame_Drop.radiobutton, anchor="w", width=50, cursor="hand2",
-                                    text = "LR calculated with Pr(D) (Method 2)", variable = DropModeVar, value = 3,
+                                    text = "LR calculated with Pr(D) (Method B)", variable = DropModeVar, value = 3,
                                     command = function() {
                                       tkconfigure(label_FixedLR, state="disabled")
                                       tkconfigure(entry_FixedLR, state="disabled")
