@@ -8,7 +8,7 @@ Description: KinBN is a free software for kinship analysis based on a Bayesian n
 License: GPL (>=3)
 Encoding: UTF-8
 LazyData: true
-Depends: R (>= 4.3.3), tcltk, tcltk2, bnlearn, gRbase
+Depends: R (>= 4.3.2), tcltk, tcltk2, bnlearn, gRbase
 Imports: gRain, kinship2, tkrplot
 Suggests: 
     testthat (>= 3.0.0)
