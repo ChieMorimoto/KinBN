@@ -1,5 +1,4 @@
 calcLR <- function(envProj, envGUI){
-
   labelframe_LR <- get("labelframe_LR", pos = envGUI)
   simuframe_LR <- get("simuframe_LR", pos = envGUI)
   finResults <- get("finResults", pos = envProj)

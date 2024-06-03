@@ -22,7 +22,6 @@ windowDropSet <- function(envProj){
   frame_FixedLR <- tkframe(outframe_Drop.setting)
   frame_Semi <- tkframe(outframe_Drop.setting)
 
-
   label_FixedLR <- tklabel(frame_FixedLR, text="LR value in allele drop-out locus", width="30",state="disabled")
   entry_FixedLR <- tkentry(frame_FixedLR, textvariable = FixedLRVar, width="5", bg="white",state="disabled")
   if(DropMode == "0"){

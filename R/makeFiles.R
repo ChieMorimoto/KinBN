@@ -104,6 +104,5 @@ makeFiles <- function(envProj, envGUI, modeStateVar){
 
     assign("check_frequency", check_frequency, envir = envGUI)
     assign("check_mutation", check_mutation, envir = envGUI)
-
 }
 

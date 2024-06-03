@@ -101,7 +101,6 @@ OpenFile <- function(envProj, envGUI, filetype, filelabel){
     fpVar <- tclVar(fp)
     fnVar <- tclVar(fn)
 
-
     fileName <-  tclvalue(tkgetOpenFile(initialdir = tclvalue(fpVar), multiple = "true", filetypes = "{{CSV Files} {.csv}}"))
     if(!nchar(fileName)){
       tkmessageBox(message = "No file was selected!", icon = "error", type = "ok")

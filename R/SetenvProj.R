@@ -47,7 +47,6 @@ setEnvProj <- function(envProj, setfiles){
   assign("finResults", FALSE, envir = envProj)
 }
 
-
 newProj <- function(envProj, envGUI){
   inputOk <- "ok"
   finHypo <- get("finHypo", pos = envProj)

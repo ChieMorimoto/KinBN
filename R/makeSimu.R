@@ -18,7 +18,6 @@ makeSimu <- function(envProj, envGUI, modeStateVar){
     }
   }
   if(modeStateVar == "1"){
-
     button_LR.simuResult <- get("button_LR.simuResult", pos = envGUI)
     tkdestroy(button_LR.simuResult)
     simuframe_LR <- get("simuframe_LR", pos = envGUI)

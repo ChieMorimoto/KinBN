@@ -88,7 +88,6 @@ makeHypo <- function(envProj, envGUI, modeStateVar){
     ref.num <- tclVar("")
 
     if (modeStateVar == "2"){
-
       label_ref.num <- tklabel(frame_Hypo.apply, text="Number of known profiles", anchor="w")
       text_ref.num <- tkentry(frame_Hypo.apply, textvariable=ref.num, width=8, background="#ffffff")
       button_ref.num <- tkbutton(frame_Hypo.apply, text="Apply", cursor="hand2", width=8,
@@ -386,5 +385,4 @@ makeHypo <- function(envProj, envGUI, modeStateVar){
   tabs <- get("tabs", pos = envGUI)
   tk2notetab.select(tabs, "Hypothesis")
   assign("finHypo", TRUE, envir = envProj)
-
 }

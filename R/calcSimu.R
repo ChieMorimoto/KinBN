@@ -48,7 +48,6 @@ Pedigree.make_linkage_mutation <- function(pedmake.info){
   return(result)
 }
 
-
 calcSimu <- function(envProj, envGUI, LR.N, modeStateVar){
 
   labelframe_LR <- get("labelframe_LR", pos = envGUI)
@@ -64,7 +63,6 @@ calcSimu <- function(envProj, envGUI, LR.N, modeStateVar){
       tkdestroy(labelframe_LR)
       tkdestroy(simuframe_LR)
       tkdestroy(outframe_simu)
-
     }
   }
 
@@ -93,7 +91,6 @@ calcSimu <- function(envProj, envGUI, LR.N, modeStateVar){
 
   FreqMode <- get("FreqMode", pos = envProj)
   min.freq <- get("min.freq", pos = envProj)
-
 
   t.simu <- proc.time()
   n.simu <- as.numeric(LR.N)

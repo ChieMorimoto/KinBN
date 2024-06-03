@@ -1,6 +1,4 @@
 simu_Report <- function(envProj){
-  #modeState <- get("modeState", pos = envProj)
-  #modeStateVar <- tclVar(modeState)
   dropState <- get("dropState", pos = envProj)
   DropMode <- get("DropMode", pos = envProj)
   FreqMode <- get("FreqMode", pos = envProj)

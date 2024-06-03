@@ -83,7 +83,6 @@ Report.common <- function(modeStateVar, dropState, DropMode, FreqMode, FixedLR, 
   return(report_common)
 }
 
-
 Report.save <- function(report, pre_SaveFileName){
   if (tclvalue(pre_SaveFileName) != ""){
     if (substr(tclvalue(pre_SaveFileName),nchar(tclvalue(pre_SaveFileName)) - 3,nchar(tclvalue(pre_SaveFileName))) == ".csv"){

@@ -32,7 +32,6 @@ pedigree.simple.loop <- function(df){
   }
   return(df)
 }
-
 check.pedigree <- function(df1,df2){
   res <- 1
   if(nrow(df1) != nrow(df2)){

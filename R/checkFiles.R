@@ -53,7 +53,6 @@ checkFile <- function(envProj, modeStateVar){
   NGMSE.RR <- c(0.1172)
   default_locus_set[[5]] <- list(NGMSE.set,NGMSE.linkage.loci,NGMSE.RR)
   names(default_locus_set)[5] <- "NGM SElect"
-
   assign("default_locus_set", default_locus_set, envir = envProj)
 
   if (length(freqFp) == 0){

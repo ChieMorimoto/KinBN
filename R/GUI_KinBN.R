@@ -95,7 +95,6 @@ KinBN <- function(){
     frame_Hypo.select[[j]] <- tkframe(canvas_Hypo[[j]])
   }
 
-
   assign("frame_Hypo.apply", frame_Hypo.apply, envir = envGUI)
   assign("label_ref.num", label_ref.num, envir = envGUI)
   assign("text_ref.num", text_ref.num, envir = envGUI)
