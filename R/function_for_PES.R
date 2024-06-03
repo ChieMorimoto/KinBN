@@ -19,6 +19,3 @@ allele_to_dropgenotype <- function(x){
   }
   return(paste(min(x),"-",max(x),sep=""))
 }
-
-
-
