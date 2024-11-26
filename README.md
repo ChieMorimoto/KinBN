@@ -22,7 +22,7 @@ Minor changes:
 
 ## Getting started
 
-1.  Install the R language (v.4.3 or v.4.2) available on the R Development Core Team website (<http://www.r-project.org>).
+1.  Install the R language (>= v.4.3.2) available on the R Development Core Team website (<http://www.r-project.org>).
 
 2.  Enter the code below the R console to install KinBN and other necessary packages.
 
